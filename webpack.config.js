@@ -14,14 +14,20 @@ module.exports = {
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js']
 	},
-	externals: {
-		react: 'commonjs react',
-		'react-dom': 'commonjs react-dom'
-	},
 	output: {
 		filename: 'index.js',
 		path: path.resolve(__dirname, 'build'),
-		libraryTarget: 'commonjs2'
+		libraryTarget: 'umd',
+		library: 'easyformui'
+	},
+	externals: {
+		lodash: {
+			commonjs: 'lodash',
+			commonjs2: 'lodash',
+			amd: 'lodash',
+			root: '_'
+		},
+		react: 'react' // Case matters here
 	},
 	performance: {
 		hints: false

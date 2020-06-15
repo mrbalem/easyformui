@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as Yup from 'yup';
-import { Formik, Form, Field, FormikHelpers } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { Grid, MenuItem } from '@material-ui/core';
 import { TextField } from 'formik-material-ui';
 
@@ -29,6 +29,7 @@ type formtype = {
 	required?: true;
 	messageRequired?: string;
 	validation: validation;
+	variant?: 'outlined' | 'filled' | 'standar';
 	messageValidation?: string;
 	disabled?: true;
 	multiline?: true; // especifica si el input es de formato textArea
@@ -52,19 +53,16 @@ type formtype = {
 	select?: Array<{ value: string; label: string }>; // especica si el input es de tipo select
 };
 
-type Values = any;
-
 export interface FomrsProps {
 	form: Array<formtype>;
-	onSubmit: (
-		element: Values,
-		{ setSubmitting }?: FormikHelpers<Values>
-	) => void;
+	onSubmit: (values: any, setSubmitting: any) => void | Promise<any>;
 	children: (
 		isSubmitting: boolean,
 		submitForm?: () => void,
 		values?: any
 	) => React.ReactChild;
+	classNameTitle?: '';
+	styleTitle?: React.CSSProperties;
 }
 
 /**
@@ -107,7 +105,7 @@ export interface FomrsProps {
 
 const Fomrs: React.SFC<FomrsProps> = props => {
 	// recuperamos los datos de props
-	const { form, onSubmit, children } = props;
+	const { form, onSubmit, children, classNameTitle, styleTitle } = props;
 
 	/**
 	 * @param values los elementos a recuperar.
@@ -178,7 +176,9 @@ const Fomrs: React.SFC<FomrsProps> = props => {
 							<React.Fragment key={value.name + index.toString()}>
 								{value.title && (
 									<Grid item xs={12} md={12}>
-										{value.title}
+										<div className={classNameTitle} style={styleTitle}>
+											{value.title}
+										</div>
 									</Grid>
 								)}
 								<Grid item xs={value.xs} md={value.md}>
@@ -194,7 +194,7 @@ const Fomrs: React.SFC<FomrsProps> = props => {
 											select
 											disabled={value.disabled}
 											fullWidth
-											variant='outlined'
+											variant={value.variant || 'outlined'}
 											label={value.label}>
 											{value.select.map((ele, index) => (
 												<MenuItem
@@ -209,13 +209,18 @@ const Fomrs: React.SFC<FomrsProps> = props => {
 											component={TextField}
 											name={value.name}
 											disabled={value.disabled}
+											type={value.type}
+											multiline={value.multiline}
+											rows={value.rows}
+											inputProps={value.inputProps}
+											InputLabelProps={{ shrink: value.shrink }}
 											error={
 												errors[value.name] && touched[value.name]
 													? true
 													: undefined
 											}
 											fullWidth
-											variant='outlined'
+											variant={value.variant || 'outlined'}
 											label={value.label}
 										/>
 									)}

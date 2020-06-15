@@ -42,7 +42,6 @@ exports everything as a named export
 
 ```js
 import { form } from 'easyformui'; // for everything
-// or
 ```
 
 ```js
