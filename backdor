@@ -1,0 +1,263 @@
+[*** tex fiel Function]
+/** @format */
+
+import * as React from 'react';
+import { TextField, Select } from 'formik-material-ui';
+import { Field, ErrorMessage } from 'formik';
+import {
+	MenuItem,
+	Checkbox,
+	FormGroup,
+	FormControlLabel
+} from '@material-ui/core';
+
+const TextFieldsFuntion = (elements: any, errors: any, touched: any) => {
+	const { isRequerid, iniTialValues, xs, sm, items, ...rest } = elements;
+
+	if (!elements.input) throw new Error('Input is requerid');
+	if (!rest.type) throw new Error('Type is requerid');
+	if (!rest.name) throw new Error('Name is requerid');
+	if (!rest.label) throw new Error('Label is requerid');
+
+	//const { name, type, label, fullWidth, items, variant} = elements;
+	switch (elements.input) {
+		case 'TextField':
+			return (
+				<Field
+					component={TextField}
+					{...rest}
+					error={errors[rest.name] && touched[rest.name] ? true : undefined}
+				/>
+			);
+
+		case 'Checkbox':
+			return (
+				<React.Fragment>
+					<label>
+						<Field
+							component={Checkbox}
+							{...rest}
+							error={
+								errors[rest.name] && touched[rest.name]
+									? Boolean('true')
+									: undefined
+							}
+						/>
+						{rest.label}
+					</label>
+					<ErrorMessage
+						name={rest.name}
+						component='div'
+						className='invalid-feedback'
+					/>
+				</React.Fragment>
+				// <Field
+				// 	// type={type}
+				// 	error={errors[rest.name] && touched[rest.name] ? true : undefined}
+				// 	component={Checkbox}
+				// 	// name={name}
+				// 	{...rest}
+				// />
+			);
+
+		case 'Checkboxes':
+			return (
+				<FormGroup row>
+					{items.map((ele: any, index: number) => {
+						const { label, ...rest } = ele;
+						return (
+							<FormControlLabel
+								key={index}
+								control={
+									//type={type} name={name}
+									<Field component={Checkbox} {...rest} />
+								}
+								label={ele.label}
+							/>
+						);
+					})}
+				</FormGroup>
+			);
+
+		case 'TextFielSlect':
+			return (
+				<Field
+					component={TextField}
+					select
+					// label={label}
+					// name={name}
+					// type={type}
+					error={errors[rest.name] && touched[rest.name] ? true : undefined}
+					//fullWidth={fullWidth || false}
+					// disabled={elements.disabled || false}
+					// onChange={elements.onChange}
+					//variant={elements.variant || 'outlined'}
+					{...rest}>
+					{items.map((ele: any, index: number) => (
+						<MenuItem key={index} value={ele.value}>
+							{ele.label}
+						</MenuItem>
+					))}
+				</Field>
+			);
+
+		case 'SelecNative':
+			return (
+				<Field
+					component={Select}
+					error={errors[rest.name] && touched[rest.name] ? true : undefined}
+					native
+					// fullWidth={fullWidth || false}
+					// name={name}
+					// variant={variant || 'outlined'}
+					{...rest}>
+					<option value='' disabled>
+						Elige una categoria
+					</option>
+					{items.map((ele: any, index: number) => (
+						<React.Fragment key={index}>
+							<optgroup label={ele.label}>
+								{ele.items.map((items: any, index: number) => (
+									<option key={index} value={items.value}>
+										{items.label}
+									</option>
+								))}
+							</optgroup>
+						</React.Fragment>
+					))}
+				</Field>
+			);
+		default:
+			return <div>no se seleciono un input</div>;
+	}
+};
+
+export default TextFieldsFuntion;
+
+
+
+/** @format */
+
+import React, { useEffect, useState } from 'react';
+import * as Yup from 'yup';
+import TextFieldsFuntion from '../TextFieldsFuntion';
+import { Formik, Form } from 'formik';
+import { Grid, Divider, Button } from '@material-ui/core';
+
+interface TextFields {
+	textfields: any;
+}
+
+export interface FormsProps {
+	initialValue: any;
+	validationSchema: any;
+	TextFields: Array<TextFields>;
+	onSubmit: any;
+	buttonName: string;
+	title: string;
+}
+
+const Forms: React.SFC<FormsProps> = props => {
+	const { onSubmit, TextFields, title, buttonName = 'Enviar' } = props;
+
+	const [initialvalue, setInitialvalue] = useState({});
+	const [validationSchema, setValidationSchema] = useState({});
+	const [loading, setLoading] = useState(false);
+
+	// colection of validations number, string, etc
+	const getValidation = (type: string, name: string): any => {
+		switch (type) {
+			case 'number':
+				return Yup.number().required(`${name} es necesario`);
+			case 'text':
+				return Yup.string().required(`${name} es necesario`);
+			case 'email':
+				return Yup.string()
+					.email('Email invalido')
+					.required(`${name} es necesario`);
+			case 'password':
+				return Yup.string()
+					.min(6, 'La contraseña debe tener al menos 6 caracteres')
+					.required(`${name} es necesario`);
+			default:
+				throw new Error('no se encontro el tipo de validacion');
+		}
+	};
+
+	useEffect(() => {
+		TextFields.map(ele => {
+			ele.textfields.map((ele: any) => {
+				if (Object.keys(ele).length === 0)
+					throw new Error('Por favor establesca elementos en el arreglo');
+				if (ele.isRequerid) {
+					if (
+						typeof ele.iniTialValues === 'undefined' ||
+						typeof ele.iniTialValues === null
+					)
+						throw new Error('initialValues es necesario');
+					setInitialvalue(preven => ({
+						...preven,
+						[ele.name]: ele.iniTialValues
+					}));
+					setValidationSchema(preven => ({
+						...preven,
+						[ele.name]: getValidation(ele.type, ele.label)
+					}));
+					setLoading(true);
+				} else {
+					setLoading(true);
+				}
+			});
+		});
+	}, []);
+
+	if (!loading) {
+		return null;
+	}
+
+	return (
+		<div>
+			<Formik
+				initialValues={initialvalue || {}}
+				validationSchema={Yup.object().shape(validationSchema || {})}
+				onSubmit={onSubmit}>
+				{({ errors, isSubmitting, submitForm, values, touched }) => (
+					<Form>
+						<div style={{ textAlign: 'center' }}>
+							<h3>{title}</h3>
+						</div>
+						<br></br>
+						<Divider></Divider>
+						<br></br>
+						<Grid container spacing={0}>
+							{TextFields.map((ele, index: number) => (
+								<Grid item key={index} xs={12} sm={12}>
+									<Grid container spacing={2}>
+										{ele.textfields.map((ele: any, index: number) => (
+											<Grid item key={index} xs={ele.xs} sm={ele.sm}>
+												{TextFieldsFuntion(ele, errors, touched)}
+											</Grid>
+										))}
+									</Grid>
+								</Grid>
+							))}
+						</Grid>
+						<br></br>
+						<div>
+							<Button
+								variant='contained'
+								fullWidth
+								color='primary'
+								disabled={isSubmitting}
+								onClick={submitForm}>
+								{buttonName}
+							</Button>
+						</div>
+					</Form>
+				)}
+			</Formik>
+		</div>
+	);
+};
+
+export default Forms;
