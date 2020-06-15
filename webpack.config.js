@@ -22,5 +22,14 @@ module.exports = {
 		filename: 'index.js',
 		path: path.resolve(__dirname, 'build'),
 		libraryTarget: 'commonjs2'
+	},
+	performance: {
+		hints: false
+	},
+	optimization: {
+		splitChunks: {
+			minSize: 10000,
+			maxSize: 250000
+		}
 	}
 };

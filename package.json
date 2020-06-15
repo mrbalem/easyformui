@@ -6,7 +6,7 @@
 	"types": "build/index.d.ts",
 	"scripts": {
 		"prepublishOnly": "npm unlink && npm run build",
-		"buildWebpack": "webpack --config webpack.config.js --mode=development",
+		"buildWebpack": "webpack --config webpack.config.js --mode=production",
 		"build": "npx tsc -p ."
 	},
 	"keywords": [

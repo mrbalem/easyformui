@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as Yup from 'yup';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, FormikHelpers } from 'formik';
 import { Grid, MenuItem } from '@material-ui/core';
 import { TextField } from 'formik-material-ui';
 
@@ -52,9 +52,14 @@ type formtype = {
 	select?: Array<{ value: string; label: string }>; // especica si el input es de tipo select
 };
 
+type Values = any;
+
 export interface FomrsProps {
 	form: Array<formtype>;
-	onSubmit: (element: any) => void;
+	onSubmit: (
+		element: Values,
+		{ setSubmitting }?: FormikHelpers<Values>
+	) => void;
 	children: (
 		isSubmitting: boolean,
 		submitForm?: () => void,
@@ -89,8 +94,12 @@ export interface FomrsProps {
  * @messageValidation : Show message if is Validation
  * [props.onSubmit]
  * ----------------
- * @param props.unSubmie  Your form submission handler. It is passed your forms values and the "FormikBag", which includes an object containing a subset of the injected props and methods (i.e. all the methods with names that start with set<Thing> + resetForm) and any props that were passed to the wrapped component.
+ * @props onSubmit  Your form submission handler. It is passed your forms values and the "FormikBag", which includes an object containing a subset of the injected props and methods (i.e. all the methods with names that start with set<Thing> + resetForm) and any props that were passed to the wrapped component.
  * @description  If onSubmit is async, then Formik will automatically set isSubmitting to false on your behalf once it has resolved. This means you do NOT need to call formikBag.setSubmitting(false) manually. However, if your onSubmit function is synchronous, then you need to call setSubmitting(false) on your own
+ * @function onSubmit
+ * @param element Elements recovery of form
+ * @param setSubmitting formikBag.setSubmitting(false)
+ * @implements (values, setSubmitting) => {...}}
  * [props.hildren]
  * ----------------
  * @description return isSubmitting, submitForm, values -> () => React.ReactChild "Button type submit is necesary for React.ReactChild"
