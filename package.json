@@ -1,44 +1,45 @@
 {
-	"name": "easyformui",
-	"version": "1.0.1",
-	"description": "Libreria de formularios basado en formik con material ui.",
-	"main": "build/index.js",
-	"types": "build/index.d.ts",
-	"scripts": {
-		"prepublishOnly": "npm unlink && npm run build",
-		"buildWebpack": "webpack --config webpack.config.js --mode=production",
-		"build": "npx tsc -p ."
-	},
-	"keywords": [
-		"form",
-		"formik",
-		"materialui",
-		"mateial-formik",
-		"react",
-		"type-script"
-	],
-	"author": "Digital News",
-	"license": "ISC",
-	"peerDependencies": {
-		"react": ">=16.13.1",
-		"@types/lodash": ">=4.14.155",
-		"lodash": ">=4.17.15",
-		"react-dom": ">=16.12.0"
-	},
-	"devDependencies": {
-		"@material-ui/core": "^4.10.1",
-		"@types/lodash": "^4.14.155",
-		"@types/react": "^16.9.25",
-		"@types/yup": "^0.26.33",
-		"formik": "^2.1.4",
-		"formik-material-ui": "^2.0.0-beta.1",
-		"lodash": "^4.17.15",
-		"react": "^16.13.1",
-		"react-dom": "^16.8.0",
-		"ts-loader": "^7.0.5",
-		"typescript": "^3.9.5",
-		"webpack": "^4.43.0",
-		"webpack-cli": "^3.3.11",
-		"yup": "^0.28.5"
-	}
+  "name": "easyformui",
+  "version": "1.0.1",
+  "description": "Libreria de formularios basado en formik con material ui.",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "npm unlink && npm run-script buildWebpack",
+    "buildWebpack": "webpack --config webpack.config.js --mode=production",
+    "build": "npx tsc -p ."
+  },
+  "keywords": [
+    "form",
+    "formik",
+    "materialui",
+    "mateial-formik",
+    "react",
+    "type-script",
+    "easyformui"
+  ],
+  "author": "Digital News",
+  "license": "ISC",
+  "peerDependencies": {
+    "react": ">=16.13.1",
+    "@types/lodash": ">=4.14.155",
+    "lodash": ">=4.17.15",
+    "react-dom": ">=16.12.0"
+  },
+  "devDependencies": {
+    "@material-ui/core": "^4.10.1",
+    "@types/lodash": "^4.14.155",
+    "@types/react": "^16.9.25",
+    "@types/yup": "^0.26.33",
+    "formik": "^2.1.4",
+    "formik-material-ui": "^2.0.0-beta.1",
+    "lodash": "^4.17.15",
+    "react": "^16.13.1",
+    "react-dom": "^16.8.0",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "yup": "^0.28.5"
+  }
 }

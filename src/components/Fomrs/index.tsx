@@ -1,10 +1,10 @@
 /** @format */
 
-import * as React from 'react';
-import * as Yup from 'yup';
-import { Formik, Form, Field } from 'formik';
-import { Grid, MenuItem } from '@material-ui/core';
-import { TextField } from 'formik-material-ui';
+import * as React from "react";
+import * as Yup from "yup";
+import { Formik, Form, Field } from "formik";
+import { Grid, MenuItem } from "@material-ui/core";
+import { TextField } from "formik-material-ui";
 
 /**
  * -------------------------[validation]---------------------------
@@ -12,7 +12,7 @@ import { TextField } from 'formik-material-ui';
  * @description se define los tipos de validaciones que soporta el formulario actualmente.
  */
 
-type validation = 'email' | 'text' | 'password' | 'ruc' | 'phone';
+type validation = "email" | "text" | "password" | "ruc" | "phone";
 
 /**
  * @type form
@@ -20,49 +20,49 @@ type validation = 'email' | 'text' | 'password' | 'ruc' | 'phone';
  * @param inputProps Atributos aplicados al inputelemento. mas info --->  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes
  */
 type formtype = {
-	name: string; // especifica el nombre del input a indentificar
-	label: string;
-	md: 'auto' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12; // especifica el tamaños del input a ocupar.
-	xs?: 'auto' | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-	title?: string;
-	initialValue?: any; // valor inicial del input
-	required?: true;
-	messageRequired?: string;
-	validation: validation;
-	variant?: 'outlined' | 'filled' | 'standar';
-	messageValidation?: string;
-	disabled?: true;
-	multiline?: true; // especifica si el input es de formato textArea
-	rows?: number; // es requerio si se usa multine. donde especifica la fila del textArea
-	shrink?: true; // especifica si el label se esconde por defecto es undefinde.
-	inputProps?: any; // Atributos aplicados al inputelemento. mas info --->  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes
-	type?:
-		| 'date'
-		| 'datatime-local'
-		| 'email'
-		| 'hidden'
-		| 'month'
-		| 'number'
-		| 'password'
-		| 'radio'
-		| 'text'
-		| 'time'
-		| 'url'
-		| 'week'
-		| 'file';
-	select?: Array<{ value: string; label: string }>; // especica si el input es de tipo select
+  name: string; // especifica el nombre del input a indentificar
+  label: string;
+  md: "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12; // especifica el tamaños del input a ocupar.
+  xs?: "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+  title?: string;
+  initialValue?: any; // valor inicial del input
+  required?: true;
+  messageRequired?: string;
+  validation: validation;
+  variant?: "outlined" | "filled" | "standar";
+  messageValidation?: string;
+  disabled?: true;
+  multiline?: true; // especifica si el input es de formato textArea
+  rows?: number; // es requerio si se usa multine. donde especifica la fila del textArea
+  shrink?: true; // especifica si el label se esconde por defecto es undefinde.
+  inputProps?: any; // Atributos aplicados al inputelemento. mas info --->  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes
+  type?:
+    | "date"
+    | "datatime-local"
+    | "email"
+    | "hidden"
+    | "month"
+    | "number"
+    | "password"
+    | "radio"
+    | "text"
+    | "time"
+    | "url"
+    | "week"
+    | "file";
+  select?: Array<{ value: string; label: string }>; // especica si el input es de tipo select
 };
 
 export interface FomrsProps {
-	form: Array<formtype>;
-	onSubmit: (values: any, setSubmitting: any) => void | Promise<any>;
-	children: (
-		isSubmitting: boolean,
-		submitForm?: () => void,
-		values?: any
-	) => React.ReactChild;
-	classNameTitle?: '';
-	styleTitle?: React.CSSProperties;
+  form: Array<formtype>;
+  onSubmit: (values: any, setSubmitting: any) => void | Promise<any>;
+  children: (
+    isSubmitting: boolean,
+    submitForm?: () => void,
+    values?: any
+  ) => React.ReactChild;
+  classNameTitle?: "";
+  styleTitle?: React.CSSProperties;
 }
 
 /**
@@ -103,137 +103,147 @@ export interface FomrsProps {
  * @description return isSubmitting, submitForm, values -> () => React.ReactChild "Button type submit is necesary for React.ReactChild"
  */
 
-const Fomrs: React.SFC<FomrsProps> = props => {
-	// recuperamos los datos de props
-	const { form, onSubmit, children, classNameTitle, styleTitle } = props;
+const Fomrs: React.SFC<FomrsProps> = (props) => {
+  // recuperamos los datos de props
+  const { form, onSubmit, children, classNameTitle, styleTitle } = props;
 
-	/**
-	 * @param values los elementos a recuperar.
-	 * @description esta función nos permite recuperar los valores iniciales del formulario
-	 */
-	const _getInitialValue = (values: Array<formtype>) => {
-		const initialValues: any = {};
-		values.forEach(ele => {
-			initialValues[ele.name] = ele.initialValue || '';
-		});
-		return initialValues;
-	};
+  /**
+   * @param values los elementos a recuperar.
+   * @description esta función nos permite recuperar los valores iniciales del formulario
+   */
+  const _getInitialValue = (values: Array<formtype>) => {
+    const initialValues: any = {};
+    values.forEach((ele) => {
+      initialValues[ele.name] = ele.initialValue || "";
+    });
+    return initialValues;
+  };
 
-	/**
-	 * @param type Se especifca el tipo de validacion.
-	 * @param message Se especifica el mensage a mostrar cuando ocurrre un error.
-	 * @description esta funcion nos permite establer ciertas validadciones en nuestro formulario.
-	 */
-	const _getValidationDefault = (type: validation, message?: string) => {
-		switch (type) {
-			case 'text':
-				return Yup.string()
-					.min(3, 'El texto debe tener al menos 3 caracteres')
-					.required(message);
-			case 'email':
-				return Yup.string()
-					.email('Email invalido')
-					.required(`Email es necesario`);
-			case 'password':
-				return Yup.string()
-					.min(6, 'La contraseña debe tener al menos 6 caracteres')
-					.required(`La contraseña es necesario`);
-			default:
-				throw new Error('no se encontro el tipo de validacion');
-		}
-	};
+  /**
+   * @param type Se especifca el tipo de validacion.
+   * @param message Se especifica el mensage a mostrar cuando ocurrre un error.
+   * @description esta funcion nos permite establer ciertas validadciones en nuestro formulario.
+   */
+  const _getValidationDefault = (type: validation, message?: string) => {
+    switch (type) {
+      case "text":
+        return Yup.string()
+          .min(3, "El texto debe tener al menos 3 caracteres")
+          .required(message);
+      case "email":
+        return Yup.string()
+          .email("Email invalido")
+          .required(`Email es necesario`);
+      case "phone":
+        return Yup.string()
+          .matches(
+            /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/,
+            "El número de telefono es incorrecto."
+          )
+          .required("El campo telefono es obligatorio");
+      case "password":
+        return Yup.string()
+          .min(6, "La contraseña debe tener al menos 6 caracteres")
+          .required(`La contraseña es necesario`);
+      default:
+        throw new Error("no se encontro el tipo de validacion");
+    }
+  };
 
-	/**
-	 * @param values Contiene elementos del formulario a iterar.
-	 * @description esta funcion nos permite determinar las acciones del formulario como si es necesario o tiene que cumplir con una validacicón en especifico
-	 */
-	const _getInitialValidations = (values: Array<formtype>) => {
-		const initialValidation: any = {};
-		values.forEach(element => {
-			if (element.validation)
-				initialValidation[element.name] = _getValidationDefault(
-					element.validation,
-					element.messageValidation
-				);
-			if (element.required)
-				initialValidation[element.name] = Yup.string().required(
-					element.messageRequired
-				);
-		});
+  /**
+   * @param values Contiene elementos del formulario a iterar.
+   * @description esta funcion nos permite determinar las acciones del formulario como si es necesario o tiene que cumplir con una validacicón en especifico
+   */
+  const _getInitialValidations = (values: Array<formtype>) => {
+    const initialValidation: any = {};
+    values.forEach((element) => {
+      if (element.validation)
+        initialValidation[element.name] = _getValidationDefault(
+          element.validation,
+          element.messageValidation
+        );
+      if (element.required)
+        initialValidation[element.name] = Yup.string().required(
+          element.messageRequired
+        );
+    });
 
-		return initialValidation;
-	};
+    return initialValidation;
+  };
 
-	return (
-		<Formik
-			initialValues={_getInitialValue(form)}
-			validationSchema={Yup.object().shape(_getInitialValidations(form))}
-			onSubmit={onSubmit}>
-			{({ errors, isSubmitting, submitForm, values, touched }) => (
-				<Form>
-					<Grid container spacing={2}>
-						{form.map((value, index) => (
-							<React.Fragment key={value.name + index.toString()}>
-								{value.title && (
-									<Grid item xs={12} md={12}>
-										<div className={classNameTitle} style={styleTitle}>
-											{value.title}
-										</div>
-									</Grid>
-								)}
-								<Grid item xs={value.xs} md={value.md}>
-									{value.select ? (
-										<Field
-											component={TextField}
-											name={value.name}
-											error={
-												errors[value.name] && touched[value.name]
-													? true
-													: undefined
-											}
-											select
-											disabled={value.disabled}
-											fullWidth
-											variant={value.variant || 'outlined'}
-											label={value.label}>
-											{value.select.map((ele, index) => (
-												<MenuItem
-													key={ele.value + index.toString()}
-													value={ele.value}>
-													{ele.label}
-												</MenuItem>
-											))}
-										</Field>
-									) : (
-										<Field
-											component={TextField}
-											name={value.name}
-											disabled={value.disabled}
-											type={value.type}
-											multiline={value.multiline}
-											rows={value.rows}
-											inputProps={value.inputProps}
-											InputLabelProps={{ shrink: value.shrink }}
-											error={
-												errors[value.name] && touched[value.name]
-													? true
-													: undefined
-											}
-											fullWidth
-											variant={value.variant || 'outlined'}
-											label={value.label}
-										/>
-									)}
-								</Grid>
-							</React.Fragment>
-						))}
-					</Grid>
-					<br />
-					{children(isSubmitting, submitForm, values)}
-				</Form>
-			)}
-		</Formik>
-	);
+  return (
+    <Formik
+      initialValues={_getInitialValue(form)}
+      validationSchema={Yup.object().shape(_getInitialValidations(form))}
+      onSubmit={onSubmit}
+    >
+      {({ errors, isSubmitting, submitForm, values, touched }) => (
+        <Form>
+          <Grid container spacing={2}>
+            {form.map((value, index) => (
+              <React.Fragment key={value.name + index.toString()}>
+                {value.title && (
+                  <Grid item xs={12} md={12}>
+                    <div className={classNameTitle} style={styleTitle}>
+                      {value.title}
+                    </div>
+                  </Grid>
+                )}
+                <Grid item xs={value.xs} md={value.md}>
+                  {value.select ? (
+                    <Field
+                      component={TextField}
+                      name={value.name}
+                      error={
+                        errors[value.name] && touched[value.name]
+                          ? true
+                          : undefined
+                      }
+                      select
+                      disabled={value.disabled}
+                      fullWidth
+                      variant={value.variant || "outlined"}
+                      label={value.label}
+                    >
+                      {value.select.map((ele, index) => (
+                        <MenuItem
+                          key={ele.value + index.toString()}
+                          value={ele.value}
+                        >
+                          {ele.label}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                  ) : (
+                    <Field
+                      component={TextField}
+                      name={value.name}
+                      disabled={value.disabled}
+                      type={value.type}
+                      multiline={value.multiline}
+                      rows={value.rows}
+                      inputProps={value.inputProps}
+                      InputLabelProps={{ shrink: value.shrink }}
+                      error={
+                        errors[value.name] && touched[value.name]
+                          ? true
+                          : undefined
+                      }
+                      fullWidth
+                      variant={value.variant || "outlined"}
+                      label={value.label}
+                    />
+                  )}
+                </Grid>
+              </React.Fragment>
+            ))}
+          </Grid>
+          <br />
+          {children(isSubmitting, submitForm, values)}
+        </Form>
+      )}
+    </Formik>
+  );
 };
 
 export default Fomrs;
