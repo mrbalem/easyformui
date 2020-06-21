@@ -1,5 +1,5 @@
 <!-- @format -->
-<h1 align="center">
+<h1 aligng="center">
  Easyformui
 </h1>
 

@@ -20,31 +20,25 @@ module.exports = {
     libraryTarget: "umd",
     library: "easyformui",
   },
-  externals: {
-    // lodash: {
-    //   commonjs: "lodash",
-    //   commonjs2: "lodash",
-    //   amd: "lodash",
-    //   umd: "lodash",
-    //   root: "_",
-    // },
-    // react: "react", // Case matters here
-    // "react-dom": "reactDOM", // Case matters here
-    react: {
-      root: "React",
-      commonjs2: "react",
-      commonjs: "react",
-      amd: "react",
-      umd: "react",
+  externals: [
+    {
+      react: {
+        root: "React",
+        commonjs2: "react",
+        commonjs: "react",
+        amd: "react",
+        umd: "react",
+      },
+      "react-dom": {
+        root: "ReactDOM",
+        commonjs2: "react-dom",
+        commonjs: "react-dom",
+        amd: "react-dom",
+        umd: "react-dom",
+      },
     },
-    "react-dom": {
-      root: "ReactDOM",
-      commonjs2: "react-dom",
-      commonjs: "react-dom",
-      amd: "react-dom",
-      umd: "react-dom",
-    },
-  },
+    /@material-ui\/core\/.*/,
+  ],
   performance: {
     hints: false,
   },
@@ -55,3 +49,14 @@ module.exports = {
   //   },
   // },
 };
+
+/** Callbacks with global UMD-name of material-ui imports */
+function externalMaterialUI(_, module, callback) {
+  var isMaterialUIComponent = /^@material-ui\/core\/([^/]+)$/;
+  var match = isMaterialUIComponent.exec(module);
+  if (match !== null) {
+    var component = match[1];
+    return callback(null, `window["material-ui"].${component}`);
+  }
+  callback();
+}
