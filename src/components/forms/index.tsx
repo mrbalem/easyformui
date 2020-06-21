@@ -1,5 +1,3 @@
-/** @format */
-
 import * as React from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
@@ -7,12 +5,10 @@ import { Grid, MenuItem } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 
 /**
- * -------------------------[validation]---------------------------
- *  ---------------------------------------------------------------
  * @description se define los tipos de validaciones que soporta el formulario actualmente.
  */
 
-type validation = "email" | "text" | "password" | "ruc" | "phone";
+type validation = "email" | "text" | "password" | "phone";
 
 /**
  * @type form
@@ -20,22 +16,89 @@ type validation = "email" | "text" | "password" | "ruc" | "phone";
  * @param inputProps Atributos aplicados al inputelemento. mas info --->  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes
  */
 type formtype = {
-  name: string; // especifica el nombre del input a indentificar
+  /**
+   * @param name
+   * @description Name attribute of the input element.
+   */
+  name: string;
+  /**
+   * @param label
+   * @description The label content.
+   */
   label: string;
+  /**
+   * @param md
+   * @param xs
+   * @description Defines the number of grids the component is going to use. It's applied for the md breakpoint and wider screens if not overridden.
+   */
   md: "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12; // especifica el tamaños del input a ocupar.
   xs?: "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+  /**
+   * @param title
+   * @description Title atrtibute of the input element
+   */
   title?: string;
-  initialValue?: any; // valor inicial del input
+  /**
+   * @param initialValue
+   * @description The default value of the input element.
+   */
+  initialValue?: any;
+  /**
+   * @param required
+   * @description If true, the label is displayed as required and the input element` will be required.
+   */
   required?: true;
+  /**
+   * @param messageRequired
+   * @description Show message if is requerid
+   */
   messageRequired?: string;
-  validation: validation;
-  variant?: "outlined" | "filled" | "standar";
+  /**
+   * @param validation
+   * @description validation for the input default.
+   * @type validation
+   */
+  validation?: validation;
+  /**
+   * @param variant
+   * @description The variant to use for the input.
+   */
+  variant?: "outlined" | "filled" | "standard";
+  /**
+   * @param messageValidation
+   * @description Show message if is Validation
+   */
   messageValidation?: string;
+  /**
+   * @param disabled
+   * @description If true, the input element will be disabled.
+   */
   disabled?: true;
-  multiline?: true; // especifica si el input es de formato textArea
-  rows?: number; // es requerio si se usa multine. donde especifica la fila del textArea
-  shrink?: true; // especifica si el label se esconde por defecto es undefinde.
-  inputProps?: any; // Atributos aplicados al inputelemento. mas info --->  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes
+  /**
+   * @param multiline
+   * @description  If true, a textarea element will be rendered instead of an input.
+   */
+  multiline?: true;
+  /**
+   * @param rows
+   * @description Number of rows to display when multiline option is set to true.
+   */
+  rows?: number;
+  /**
+   * @param shrink
+   * @description If true, the label is shrunk.
+   */
+  shrink?: true;
+  /**
+   * @param inputProps
+   * @description Attributes applied to the input element.
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes
+   */
+  inputProps?: any;
+  /**
+   * @param type
+   * @description Type of the input element. It should be a valid HTML5 input type.
+   */
   type?:
     | "date"
     | "datatime-local"
@@ -44,66 +107,72 @@ type formtype = {
     | "month"
     | "number"
     | "password"
-    | "radio"
+    | "tel"
     | "text"
     | "time"
     | "url"
     | "week"
     | "file";
-  select?: Array<{ value: string; label: string }>; // especica si el input es de tipo select
+
+  /**
+   * @param select
+   * @description Type input select defual values [{value: "", label: ""}]
+   */
+  select?: Array<{ value: string; label: string }>;
 };
 
-export interface FomrsProps {
+/**
+ *Forms properties.
+ */
+export interface FormsProps {
+  /**
+   *Necessary elements for the forms.
+   *@param name is required. Name attribute of the input element. <br/>
+   *@param label is required. The label content. <br/>
+   *@param md is required.  Defines the number of grids the component is going to use. It's applied for the md breakpoint and wider screens if not overridden. type of("auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12) <br/>
+   *@param title Title atrtibute of the input element <br/>
+   *@param initialValue If true, the label is displayed as required and the input element` will be required. <br/>
+   *@param required If true, the label is displayed as required and the input element` will be required.  <br/>
+   *@param messageRequired  Show message if is requerid  <br/>
+   *@param validation  validation for the input default. type of ("email" | "text" | "password" | "phone")  <br/>
+   *@param messageValidation  Show message if is Validation  <br/>
+   *@param variant The variant to use for the input. type of("outlined" | "filled" | "standard")    <br/>
+   *@param disabled  If true, the input element will be disabled.   <br/>
+   *@param multiline  If true, a textarea element will be rendered instead of an input.    <br/>
+   *@param rows  Number of rows to display when multiline option is set to true.  <br/>
+   *@param shrink  If true, the label is shrunk.   <br/>
+   *@param inputProps  Type of the input element. It should be a valid HTML5 input type. [inputProps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes)  <br/>
+   *@param type Type of the input element. It should be a valid HTML5 input type. default "text", type of ("date" | "datatime-local" | "email" | "hidden" | "tel" | "month" | "number" | "password" | "text" | "time" | "url" | "week" | "file") <br/>
+   *@param select  Type input select defual values [{value: "", label: ""}]   <br/>
+   */
   form: Array<formtype>;
-  onSubmit: (values: any, setSubmitting: any) => void | Promise<any>;
+  /**
+   *Determines the action of the onSubmit.
+   *@param values retorna los elementos capturados del formulario.<br/>
+   *@param formikBag Si onSubmites es asíncrona, entonces FORMIK fijará automáticamente isSubmitting a false en su nombre una vez que se haya resuelto. Esto significa que NO necesita llamar formikBag.setSubmitting(false) manualmente. Sin embargo, si su onSubmit función es síncrona, entonces debe llamar setSubmitting(false) por su cuenta.
+   */
+  onSubmit: (values: any, formikBag?: any) => void | Promise<any>;
   children: (
     isSubmitting: boolean,
     submitForm?: () => void,
     values?: any
   ) => React.ReactChild;
-  classNameTitle?: "";
+  /**
+   *Determine the classes necessary for the title of the form.
+   */
+  classNameTitle?: string;
+  /**
+   *Determine the styles of the form title.
+   */
   styleTitle?: React.CSSProperties;
 }
 
 /**
- * @interface FomrsProps
- * @type formtype
- * @param props.form especifica los valores necesarios para el funcionamiento del formulario.
- * @form
- * [valores props.form is Required *]
- * ----------------------------------
- * @name string : Name attribute of the input element.
- * @label string : The label content.
- * @md : Defines the number of grids the component is going to use. It's applied for the md breakpoint and wider screens if not overridden.
- * [valores props.form is not Required *]
- * --------------------------------------
- * @initialValue : The default value of the input element.
- * @required true : If true, the label is displayed as required and the input element` will be required.
- * @disabled true : If true, the input element will be disabled.
- * @multiline true : If true, a textarea element will be rendered instead of an input.
- * @rows : Number of rows to display when multiline option is set to true.
- * @shrink : 	If true, the label is shrunk.
- * @xs : Defines the number of grids the component is going to use. It's applied for all the screen sizes with the lowest priority.
- * @inputProps : Attributes applied to the input element.
- * @type : Type of the input element. It should be a valid HTML5 input type.
- * @select : Type input select defual values [{value: "", label: ""}]
- * @validation : validation for the input default.
- * @messageRequired : Show message if is requerid
- * @messageValidation : Show message if is Validation
- * [props.onSubmit]
- * ----------------
- * @props onSubmit  Your form submission handler. It is passed your forms values and the "FormikBag", which includes an object containing a subset of the injected props and methods (i.e. all the methods with names that start with set<Thing> + resetForm) and any props that were passed to the wrapped component.
- * @description  If onSubmit is async, then Formik will automatically set isSubmitting to false on your behalf once it has resolved. This means you do NOT need to call formikBag.setSubmitting(false) manually. However, if your onSubmit function is synchronous, then you need to call setSubmitting(false) on your own
- * @function onSubmit
- * @param element Elements recovery of form
- * @param setSubmitting formikBag.setSubmitting(false)
- * @implements (values, setSubmitting) => {...}}
- * [props.hildren]
- * ----------------
- * @description return isSubmitting, submitForm, values -> () => React.ReactChild "Button type submit is necesary for React.ReactChild"
+ *@version 1.0.0
+ *@author [Rony cb ](https://github.com/mrbalem)
  */
 
-const Fomrs: React.SFC<FomrsProps> = (props) => {
+const Forms: React.SFC<FormsProps> = (props) => {
   // recuperamos los datos de props
   const { form, onSubmit, children, classNameTitle, styleTitle } = props;
 
@@ -246,4 +315,4 @@ const Fomrs: React.SFC<FomrsProps> = (props) => {
   );
 };
 
-export default Fomrs;
+export default Forms;
