@@ -5,12 +5,6 @@ import { Grid, MenuItem } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 
 /**
- * @description se define los tipos de validaciones que soporta el formulario actualmente.
- */
-
-type validation = "email" | "text" | "password" | "phone";
-
-/**
  * @type form
  * @description especifica los valores nesarios para el funcionamiento del formulario. *
  * @param inputProps Atributos aplicados al inputelemento. mas info --->  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes
@@ -55,15 +49,9 @@ type formtype = {
   messageRequired?: string;
   /**
    * @param validation
-   * @description validation for the input default.
-   * @type validation
+   * @description validation for the input default. suport "email", "text", "password", "tel";
    */
-  validation?: validation;
-  /**
-   * @param variant
-   * @description The variant to use for the input.
-   */
-  variant?: "outlined" | "filled" | "standard";
+  validation?: true;
   /**
    * @param messageValidation
    * @description Show message if is Validation
@@ -95,6 +83,11 @@ type formtype = {
    * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes
    */
   inputProps?: any;
+  /**
+   * @param inputRef
+   * @description Pass a ref to the input element.
+   */
+  inputRef?: React.RefObject<HTMLInputElement>;
   /**
    * @param type
    * @description Type of the input element. It should be a valid HTML5 input type.
@@ -134,22 +127,22 @@ export interface FormsProps {
    *@param initialValue If true, the label is displayed as required and the input element` will be required. <br/>
    *@param required If true, the label is displayed as required and the input element` will be required.  <br/>
    *@param messageRequired  Show message if is requerid  <br/>
-   *@param validation  validation for the input default. type of ("email" | "text" | "password" | "phone")  <br/>
+   *@param validation  validation for the input default. suport "email", "text", "password" y "phone"  <br/>
    *@param messageValidation  Show message if is Validation  <br/>
-   *@param variant The variant to use for the input. type of("outlined" | "filled" | "standard")    <br/>
    *@param disabled  If true, the input element will be disabled.   <br/>
    *@param multiline  If true, a textarea element will be rendered instead of an input.    <br/>
    *@param rows  Number of rows to display when multiline option is set to true.  <br/>
    *@param shrink  If true, the label is shrunk.   <br/>
    *@param inputProps  Type of the input element. It should be a valid HTML5 input type. [inputProps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes)  <br/>
+   *@param inputRef Pass a ref to the input element. <br/>
    *@param type Type of the input element. It should be a valid HTML5 input type. default "text", type of ("date" | "datatime-local" | "email" | "hidden" | "tel" | "month" | "number" | "password" | "text" | "time" | "url" | "week" | "file") <br/>
    *@param select  Type input select defual values [{value: "", label: ""}]   <br/>
    */
   form: Array<formtype>;
   /**
    *Determines the action of the onSubmit.
-   *@param values retorna los elementos capturados del formulario.<br/>
-   *@param formikBag Si onSubmites es asíncrona, entonces FORMIK fijará automáticamente isSubmitting a false en su nombre una vez que se haya resuelto. Esto significa que NO necesita llamar formikBag.setSubmitting(false) manualmente. Sin embargo, si su onSubmit función es síncrona, entonces debe llamar setSubmitting(false) por su cuenta.
+   *@param values returns the captured elements of the form..<br/>
+   *@param formikBag If onSubmites is asynchronous, then FORMIK will automatically set isSubmitting to false on your behalf once it has been resolved. This means that you DO NOT need to call formikBag.setSubmitting (false) manually. However, if your onSubmit function is synchronous, then you must call setSubmitting (false) on your own.
    */
   onSubmit: (values: any, formikBag?: any) => void | Promise<any>;
   children: (
@@ -165,6 +158,10 @@ export interface FormsProps {
    *Determine the styles of the form title.
    */
   styleTitle?: React.CSSProperties;
+  /**
+   * The variant to use for the input. type of("outlined" | "filled" | "standard"), default "outlined"
+   */
+  variant?: "outlined" | "filled" | "standard";
 }
 
 /**
@@ -174,7 +171,14 @@ export interface FormsProps {
 
 const Forms: React.SFC<FormsProps> = (props) => {
   // recuperamos los datos de props
-  const { form, onSubmit, children, classNameTitle, styleTitle } = props;
+  const {
+    form,
+    onSubmit,
+    children,
+    classNameTitle,
+    styleTitle,
+    variant = "outlined",
+  } = props;
 
   /**
    * @param values los elementos a recuperar.
@@ -191,31 +195,38 @@ const Forms: React.SFC<FormsProps> = (props) => {
   /**
    * @param type Se especifca el tipo de validacion.
    * @param message Se especifica el mensage a mostrar cuando ocurrre un error.
+   * @param label Recuperamos el label para mostrar un error por defecto
    * @description esta funcion nos permite establer ciertas validadciones en nuestro formulario.
    */
-  const _getValidationDefault = (type: validation, message?: string) => {
+  const _getValidationDefault = (
+    type: string,
+    label?: string,
+    message?: string
+  ) => {
     switch (type) {
       case "text":
         return Yup.string()
           .min(3, "El texto debe tener al menos 3 caracteres")
-          .required(message);
+          .required(message || label + " es un campo obligatorio");
       case "email":
         return Yup.string()
-          .email("Email invalido")
-          .required(`Email es necesario`);
-      case "phone":
+          .email(message || "Email invalido")
+          .required(`Email es un campo obligatorio`);
+      case "tel":
         return Yup.string()
           .matches(
             /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/,
-            "El número de telefono es incorrecto."
+            message || "El número de telefono es incorrecto."
           )
-          .required("El campo telefono es obligatorio");
+          .required("Telefono es un campo obligatorio");
       case "password":
         return Yup.string()
-          .min(6, "La contraseña debe tener al menos 6 caracteres")
-          .required(`La contraseña es necesario`);
+          .min(6, message || "La contraseña debe tener al menos 6 caracteres")
+          .required(`Contraseña es un campo obligatorio`);
       default:
-        throw new Error("no se encontro el tipo de validacion");
+        throw new Error(
+          "No se encontro el tipo de validación para este formulario, actualmente soporta las siguientes validaciones email, text, password y tel"
+        );
     }
   };
 
@@ -226,18 +237,40 @@ const Forms: React.SFC<FormsProps> = (props) => {
   const _getInitialValidations = (values: Array<formtype>) => {
     const initialValidation: any = {};
     values.forEach((element) => {
-      if (element.validation)
+      if (element.validation && element.type)
         initialValidation[element.name] = _getValidationDefault(
-          element.validation,
+          element.type,
+          element.label,
           element.messageValidation
         );
       if (element.required)
         initialValidation[element.name] = Yup.string().required(
-          element.messageRequired
+          element.messageRequired || element.label + " es un campo obligatorio"
         );
     });
 
     return initialValidation;
+  };
+
+  /**
+   *@param multiline determina el estado de multina
+   *@param rows determina el estado de rows
+   *@description esta funcion determina el estado del error de multiline verficiando los 2 parametros de entrada
+   */
+  const _captureHandleErrorMultiline = (
+    multiline: boolean | undefined,
+    rows: number | undefined
+  ) => {
+    if (multiline) {
+      if (rows && rows > 1) return true;
+      else
+        throw new Error(
+          "Por favor establesca el numero de filas a mostrar, el numero de filas tiene que ser mayor a 1.su número de fila es: " +
+            rows
+        );
+    } else {
+      return undefined;
+    }
   };
 
   return (
@@ -271,7 +304,7 @@ const Forms: React.SFC<FormsProps> = (props) => {
                       select
                       disabled={value.disabled}
                       fullWidth
-                      variant={value.variant || "outlined"}
+                      variant={variant}
                       label={value.label}
                     >
                       {value.select.map((ele, index) => (
@@ -287,9 +320,13 @@ const Forms: React.SFC<FormsProps> = (props) => {
                     <Field
                       component={TextField}
                       name={value.name}
+                      inputRef={value.inputRef}
                       disabled={value.disabled}
                       type={value.type}
-                      multiline={value.multiline}
+                      multiline={_captureHandleErrorMultiline(
+                        value.multiline,
+                        value.rows
+                      )}
                       rows={value.rows}
                       inputProps={value.inputProps}
                       InputLabelProps={{ shrink: value.shrink }}
@@ -299,7 +336,7 @@ const Forms: React.SFC<FormsProps> = (props) => {
                           : undefined
                       }
                       fullWidth
-                      variant={value.variant || "outlined"}
+                      variant={variant}
                       label={value.label}
                     />
                   )}

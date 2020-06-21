@@ -19,7 +19,15 @@
 | type              | true   | Receives the name of currently focused field             |
 | select            | true   | Receives the name of currently focused field             | -->
 
-### children props:
+## Install
+
+```bash
+npm install easyformui
+```
+
+`Important: replace ./index.tsx for easyformui`
+
+#### children props:
 
 `(isSubmitting: boolean, submitForm?: any, values?: any) => React.ReactChild`
 
@@ -140,7 +148,14 @@ import Forms from "./index.tsx";
       label: "Required",
       md: 12,
       required: true,
-      messageRequired: "Required es un campo obligatorio",
+    },
+    {
+      title: "Custom message Input Required  ",
+      name: "required2",
+      label: "Custom message",
+      messageRequired: "Custom message is a required field",
+      md: 12,
+      required: true,
     },
   ]}
 >
@@ -162,32 +177,33 @@ import Forms from "./index.tsx";
     {
       title: "Form validations",
       name: "text",
+      type: "text",
       label: "Validation Text",
       md: 12,
-      messageValidation: "text es un campo obligatorio",
-      validation: "text",
+      validation: true,
     },
     {
-      title: "Default Message",
+      title: "Custom Message",
       name: "email",
       label: "Validation email",
       type: "email",
+      messageValidation: "email is not corret",
       md: 12,
-      validation: "email",
+      validation: true,
     },
     {
       name: "password",
       label: "Validation password",
       type: "password",
       md: 6,
-      validation: "password",
+      validation: true,
     },
     {
       name: "phone",
       label: "Validation phone",
       type: "tel",
       md: 6,
-      validation: "phone",
+      validation: true,
     },
   ]}
 >
@@ -211,7 +227,7 @@ import Forms from "./index.tsx";
       name: "Multiline",
       label: "Multiline",
       multiline: true,
-      rows: 3,
+      rows: 2,
       md: 12,
     },
     {
@@ -354,29 +370,68 @@ import Forms from "./index.tsx";
 import Forms from "./index.tsx";
 
 <Forms
+  variant="filled"
   onSubmit={(values, { setSubmitting }) => {
     alert(JSON.stringify(values));
     setSubmitting(false);
   }}
   form={[
     {
-      title: "variant default",
-      name: "variant_default",
-      label: "variant default",
-      md: 12,
-    },
-    {
       title: "variant filled",
       name: "variant_filled",
-      label: "Variant filled",
-      variant: "filled",
+      label: "variant filled",
       md: 12,
     },
     {
+      name: "input_one",
+      label: "input one",
+      md: 6,
+    },
+    {
+      name: "input_tow",
+      label: "Input two",
+      md: 6,
+    },
+    {
+      name: "input_tree",
+      label: "Input Tree",
+      md: 12,
+    },
+  ]}
+>
+  {(isSubmitting) => <button disabled={isSubmitting}>Enviar</button>}
+</Forms>;
+```
+
+```tsx
+import Forms from "./index.tsx";
+
+<Forms
+  variant="standard"
+  onSubmit={(values, { setSubmitting }) => {
+    alert(JSON.stringify(values));
+    setSubmitting(false);
+  }}
+  form={[
+    {
       title: "variant standard",
-      name: "variant_standar",
-      label: "Variant standard",
-      variant: "standard",
+      name: "variant_standard",
+      label: "variant standard",
+      md: 12,
+    },
+    {
+      name: "input_one",
+      label: "input one",
+      md: 6,
+    },
+    {
+      name: "input_tow",
+      label: "Input two",
+      md: 6,
+    },
+    {
+      name: "input_tree",
+      label: "Input Tree",
       md: 12,
     },
   ]}
