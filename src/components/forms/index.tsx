@@ -108,6 +108,16 @@ type formtype = {
     | "file";
 
   /**
+   * @param autoComplete
+   * Necesary autoComplete for input
+   */
+  autoComplete?: string;
+  /**
+   * @param autoFocus
+   * Autofocus input
+   */
+  autoFocus?: true;
+  /**
    * @param select
    * @description Type input select defual values [{value: "", label: ""}]
    */
@@ -137,6 +147,8 @@ export interface FormsProps {
    *@param inputRef Pass a ref to the input element. <br/>
    *@param type Type of the input element. It should be a valid HTML5 input type. default "text", type of ("date" | "datatime-local" | "email" | "hidden" | "tel" | "month" | "number" | "password" | "text" | "time" | "url" | "week" | "file") <br/>
    *@param select  Type input select defual values [{value: "", label: ""}]   <br/>
+   *@param autoComplete Necesary autoComplete for input
+   *@param autoFocus If true, autofocus input automa.
    */
   form: Array<formtype>;
   /**
@@ -162,6 +174,29 @@ export interface FormsProps {
    * The variant to use for the input. type of("outlined" | "filled" | "standard"), default "outlined"
    */
   variant?: "outlined" | "filled" | "standard";
+  /**
+   * css propertis for input
+   */
+  style?: React.CSSProperties;
+  /**
+   * classes for component input
+   */
+  className?: string;
+  /**
+   * Option InputProps config
+   * @see https://material-ui.com/api/text-field/
+   */
+  InputProps?: {};
+  /**
+   * OPtion InputLabelProps config
+   * @see https://material-ui.com/api/text-field/
+   */
+  InputLabelProps?: {};
+  /**
+   * Option SelectProps config
+   * @see https://material-ui.com/api/text-field/
+   */
+  SelectProps?: {};
 }
 
 /**
@@ -175,8 +210,13 @@ const Forms: React.SFC<FormsProps> = (props) => {
     form,
     onSubmit,
     children,
+    className,
+    style,
     classNameTitle,
     styleTitle,
+    InputProps,
+    InputLabelProps,
+    SelectProps,
     variant = "outlined",
   } = props;
 
@@ -295,6 +335,11 @@ const Forms: React.SFC<FormsProps> = (props) => {
                   {value.select ? (
                     <Field
                       component={TextField}
+                      autoFocus={value.autoFocus}
+                      autoComplete={value.autoComplete}
+                      InputProps={InputProps}
+                      InputLabelProps={InputLabelProps}
+                      SelectProps={SelectProps}
                       name={value.name}
                       error={
                         errors[value.name] && touched[value.name]
@@ -318,6 +363,10 @@ const Forms: React.SFC<FormsProps> = (props) => {
                     </Field>
                   ) : (
                     <Field
+                      className={className}
+                      autoComplete={value.autoComplete}
+                      autoFocus={value.autoFocus}
+                      style={style}
                       component={TextField}
                       name={value.name}
                       inputRef={value.inputRef}
@@ -329,7 +378,11 @@ const Forms: React.SFC<FormsProps> = (props) => {
                       )}
                       rows={value.rows}
                       inputProps={value.inputProps}
-                      InputLabelProps={{ shrink: value.shrink }}
+                      InputProps={InputProps}
+                      InputLabelProps={{
+                        shrink: value.shrink,
+                        ...InputLabelProps,
+                      }}
                       error={
                         errors[value.name] && touched[value.name]
                           ? true
