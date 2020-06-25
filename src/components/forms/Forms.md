@@ -309,7 +309,6 @@ import Forms from "./index.tsx";
       title: "Input File basic",
       name: "file",
       label: "File basic",
-      shrink: true,
       md: 12,
       type: "file",
     },
@@ -319,16 +318,15 @@ import Forms from "./index.tsx";
       label: "File required",
       required: true,
       type: "file",
-      shrink: true,
-      md: 12,
+      md: 6,
     },
     {
       title: "Input File accept ",
       name: "file4",
       label: "File accept",
-      inputProps: { accept: "image/png, image/jpeg" },
+      // i need suport for accept and multiple file
+      //inputProps: { accept: "image/png, image/jpeg", multiple: true },
       type: "file",
-      shrink: true,
       md: 12,
     },
   ]}
@@ -437,6 +435,37 @@ import Forms from "./index.tsx";
   ]}
 >
   {(isSubmitting) => <button disabled={isSubmitting}>Enviar</button>}
+</Forms>;
+```
+
+### Input checkboxs
+
+```tsx
+import Forms from "./index.tsx";
+
+<Forms
+  variant="standard"
+  onSubmit={(values, { setSubmitting }) => {
+    alert(JSON.stringify(values));
+    setSubmitting(false);
+  }}
+  form={[
+    {
+      title: "Input Checkbox",
+      name: "checkbox",
+      validation: true,
+      messageValidation: "Los términos y condiciones deben ser aceptados",
+      label: "Acepto los Terminos y Condiciones",
+      type: "checkbox",
+      md: 12,
+    },
+  ]}
+>
+  {(isSubmitting) => (
+    <button type="submit" disabled={isSubmitting}>
+      Enviar
+    </button>
+  )}
 </Forms>;
 ```
 
