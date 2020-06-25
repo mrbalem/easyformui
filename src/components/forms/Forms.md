@@ -442,7 +442,7 @@ import Forms from "./index.tsx";
 
 #### Style Input:
 
-```note
+```diff
   import { Theme, createStyles, makeStyles } from "@material-ui/core";
 
   const useStyle = makeStyles((theme: Theme) =>
@@ -502,53 +502,52 @@ import Forms from "./index.tsx";
   })
 );
 
+const InpuStyle: React.SFC<InpuStyleProps> = () => {
+  const classes = useStyle();
+  return (
+    <Forms
+      variant="standard"
+      InputProps={{
+        disableUnderline: true,
+        classes: {
+          root: classes.root,
+          input: clsx(classes.input, classes.inputSizeMedium, {
+            [classes.inputBorder]: true,
+          }),
+          disabled: classes.disabled,
+        },
+      }}
+      InputLabelProps={{
+        shrink: true,
+        className: classes.formLabel,
+      }}
+      onSubmit={(values, { setSubmitting }) => {
+        alert(JSON.stringify(values));
+        setSubmitting(false);
+      }}
+      form={[
+        {
+          title: "Style Title",
+          required: true,
+          name: "variant_standard",
+          label: "variant standard",
+          md: 12,
+        },
+      ]}
+    >
+      {(isSubmitting) => <button disabled={isSubmitting}>Enviar</button>}
+    </Forms>
+  );
+};
+
 
 
 ```
 
 ```tsx
 import Forms from "./index.tsx";
-import TexFieldStyle from "./input.style";
-
-//[*] code component
-
-// const TexFieldStyle: React.SFC<> = () => {
-//   const classes = useStyle();
-//   return (
-//     <Forms
-//       variant="standard"
-//       InputProps={{
-//         disableUnderline: true,
-//         classes: {
-//           root: classes.root,
-//           input: clsx(classes.input, classes.inputSizeMedium, {
-//             [classes.inputBorder]: true,
-//           }),
-//           disabled: classes.disabled,
-//         },
-//       }}
-//       InputLabelProps={{
-//         shrink: true,
-//         className: classes.formLabel,
-//       }}
-//       onSubmit={(values, { setSubmitting }) => {
-//         alert(JSON.stringify(values));
-//         setSubmitting(false);
-//       }}
-//       form={[
-//         {
-//           title: "Style Title",
-//           required: true,
-//           name: "variant_standard",
-//           label: "variant standard",
-//           md: 12,
-//         },
-//       ]}
-//     >
-//       {(isSubmitting) => <button disabled={isSubmitting}>Enviar</button>}
-//     </Forms>
-//   );
-// };
+// create TexFieldStyle component
+import TexFieldStyle from "../../debugger/input.style";
 
 <TexFieldStyle />;
 ```

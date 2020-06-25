@@ -1,6 +1,6 @@
 import * as React from "react";
 import clsx from "clsx";
-import Forms from "./index";
+import Forms from "../components/forms/index";
 import { Theme, createStyles, makeStyles } from "@material-ui/core";
 
 export interface InpuStyleProps {}
