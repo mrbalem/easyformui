@@ -1,15 +1,14 @@
 import * as React from "react";
 import * as Yup from "yup";
-import { Formik, Form, Field } from "formik";
-import { Grid, MenuItem } from "@material-ui/core";
-import { TextField } from "formik-material-ui";
-
+import { Formik, Form } from "formik";
+import { Grid } from "@material-ui/core";
+import Inputs from "../inputs";
 /**
  * @type form
  * @description especifica los valores nesarios para el funcionamiento del formulario. *
  * @param inputProps Atributos aplicados al inputelemento. mas info --->  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes
  */
-type formtype = {
+export type formtype = {
   /**
    * @param name
    * @description Name attribute of the input element.
@@ -98,6 +97,7 @@ type formtype = {
     | "email"
     | "hidden"
     | "month"
+    | "checkbox"
     | "number"
     | "password"
     | "tel"
@@ -214,10 +214,7 @@ const Forms: React.SFC<FormsProps> = (props) => {
     style,
     classNameTitle,
     styleTitle,
-    InputProps,
-    InputLabelProps,
-    SelectProps,
-    variant = "outlined",
+    ...other
   } = props;
 
   /**
@@ -263,6 +260,8 @@ const Forms: React.SFC<FormsProps> = (props) => {
         return Yup.string()
           .min(6, message || "La contraseña debe tener al menos 6 caracteres")
           .required(`Contraseña es un campo obligatorio`);
+      case "checkbox":
+        return Yup.bool().required().oneOf([true]);
       default:
         throw new Error(
           "No se encontro el tipo de validación para este formulario, actualmente soporta las siguientes validaciones email, text, password y tel"
@@ -292,27 +291,6 @@ const Forms: React.SFC<FormsProps> = (props) => {
     return initialValidation;
   };
 
-  /**
-   *@param multiline determina el estado de multina
-   *@param rows determina el estado de rows
-   *@description esta funcion determina el estado del error de multiline verficiando los 2 parametros de entrada
-   */
-  const _captureHandleErrorMultiline = (
-    multiline: boolean | undefined,
-    rows: number | undefined
-  ) => {
-    if (multiline) {
-      if (rows && rows > 1) return true;
-      else
-        throw new Error(
-          "Por favor establesca el numero de filas a mostrar, el numero de filas tiene que ser mayor a 1.su número de fila es: " +
-            rows
-        );
-    } else {
-      return undefined;
-    }
-  };
-
   return (
     <Formik
       initialValues={_getInitialValue(form)}
@@ -320,7 +298,7 @@ const Forms: React.SFC<FormsProps> = (props) => {
       onSubmit={onSubmit}
     >
       {({ errors, isSubmitting, submitForm, values, touched }) => (
-        <Form>
+        <Form className={className} style={style}>
           <Grid container spacing={2}>
             {form.map((value, index) => (
               <React.Fragment key={value.name + index.toString()}>
@@ -331,68 +309,15 @@ const Forms: React.SFC<FormsProps> = (props) => {
                     </div>
                   </Grid>
                 )}
-                <Grid item xs={value.xs} md={value.md}>
-                  {value.select ? (
-                    <Field
-                      component={TextField}
-                      autoFocus={value.autoFocus}
-                      autoComplete={value.autoComplete}
-                      InputProps={InputProps}
-                      InputLabelProps={InputLabelProps}
-                      SelectProps={SelectProps}
-                      name={value.name}
-                      error={
-                        errors[value.name] && touched[value.name]
-                          ? true
-                          : undefined
-                      }
-                      select
-                      disabled={value.disabled}
-                      fullWidth
-                      variant={variant}
-                      label={value.label}
-                    >
-                      {value.select.map((ele, index) => (
-                        <MenuItem
-                          key={ele.value + index.toString()}
-                          value={ele.value}
-                        >
-                          {ele.label}
-                        </MenuItem>
-                      ))}
-                    </Field>
-                  ) : (
-                    <Field
-                      className={className}
-                      autoComplete={value.autoComplete}
-                      autoFocus={value.autoFocus}
-                      style={style}
-                      component={TextField}
-                      name={value.name}
-                      inputRef={value.inputRef}
-                      disabled={value.disabled}
-                      type={value.type}
-                      multiline={_captureHandleErrorMultiline(
-                        value.multiline,
-                        value.rows
-                      )}
-                      rows={value.rows}
-                      inputProps={value.inputProps}
-                      InputProps={InputProps}
-                      InputLabelProps={{
-                        shrink: value.shrink,
-                        ...InputLabelProps,
-                      }}
-                      error={
-                        errors[value.name] && touched[value.name]
-                          ? true
-                          : undefined
-                      }
-                      fullWidth
-                      variant={variant}
-                      label={value.label}
-                    />
-                  )}
+                <Grid item xs={value.xs || 12} md={value.md}>
+                  {/** get inputs */}
+                  <Inputs
+                    {...other}
+                    valuesInput={values}
+                    value={value}
+                    errors={errors}
+                    touched={touched}
+                  />
                 </Grid>
               </React.Fragment>
             ))}
