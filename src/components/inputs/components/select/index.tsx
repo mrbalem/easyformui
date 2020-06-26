@@ -33,7 +33,11 @@ const Select: React.SFC<InputsProps> = (props) => {
       style={{ minWidth: "100%", ...style }}
       className={className}
     >
-      <InputLabel htmlFor={value.name + "selectlabel"}>
+      <InputLabel
+        style={{ background: value.labelBackground }}
+        shrink={value.shrink}
+        htmlFor={value.name + "selectlabel"}
+      >
         {value.label}
       </InputLabel>
       <Field
