@@ -120,13 +120,22 @@ export type formtype = {
   /**
    * @param select
    * @description Type input select defual values [{value: "", label: ""}]
+   * [!] Select not found in React.Strict, alert error for FindDomain,
+   * use native select multiple.
    */
   select?: Array<{ value: string; label: string }>;
   /**
    * @param multipleSelect
    * @description If true, a multiline element rendered instead of an input
+   * [!] Select not found in React.Strict, alert error for FindDomain,
+   * use native select multiple.
    */
   multipleSelect?: true;
+  /**
+   * @param native
+   * If true use native select for input select
+   */
+  native?: true;
 };
 
 /**
@@ -152,8 +161,10 @@ export interface FormsProps {
    *@param inputRef Pass a ref to the input element. <br/>
    *@param type Type of the input element. It should be a valid HTML5 input type. default "text", type of ("date" | "datatime-local" | "email" | "hidden" | "tel" | "month" | "number" | "password" | "text" | "time" | "url" | "week" | "file") <br/>
    *@param select  Type input select defual values [{value: "", label: ""}]   <br/>
-   *@param autoComplete Necesary autoComplete for input
-   *@param autoFocus If true, autofocus input automa.
+   *@param autoComplete Necesary autoComplete for input <br/>
+   *@param autoFocus If true, input focus automatic. <br/>
+   *@param multipleSelect: If true, a multiline element rendered instead of an input. <br/>
+   *@param native: If true use native select for input select
    */
   form: Array<formtype>;
   /**
