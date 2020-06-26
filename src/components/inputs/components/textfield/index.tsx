@@ -1,7 +1,7 @@
 import * as React from "react";
 import { InputsProps } from "../../type";
 import { Field } from "formik";
-import { TextField as MuiTextField } from "@material-ui/core";
+import { TextField as MuiTextField } from "formik-material-ui";
 
 /**
  * @version 1.0.0
