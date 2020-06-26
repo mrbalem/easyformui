@@ -50,8 +50,8 @@ const SelectMultiple: React.SFC<InputsProps> = (props) => {
       className={className}
     >
       <InputLabel
-        style={{ background: "#fff" }}
-        shrink={value.native}
+        style={{ background: value.labelBackground || "#fff" }}
+        shrink={value.shrink}
         htmlFor={value.name + "selectlabel"}
       >
         {value.label}
