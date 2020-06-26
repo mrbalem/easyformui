@@ -1,6 +1,6 @@
 {
   "name": "easyformui",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Libreria de formularios basado en formik con material ui.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
