@@ -21,4 +21,6 @@ export interface InputsProps extends omitpProps {
   errors: any;
   touched: any;
   valuesInput: any;
+  style?: any;
+  className?: string;
 }
