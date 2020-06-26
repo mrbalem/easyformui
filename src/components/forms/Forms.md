@@ -247,6 +247,8 @@ import Forms from "./index.tsx";
 
 #### Input Select:
 
+##### Warnings in strict mode select findDOMNode error · Issue #13394 · mui-org/material-ui -> https://github.com/mui-org/material-ui/issues/13394, use Select native.
+
 ```tsx
 import Forms from "./index.tsx";
 
@@ -301,6 +303,31 @@ import Forms from "./index.tsx";
         { value: "valor2", label: "Valor 2" },
       ],
     },
+    {
+      title: "Input Select native",
+      name: "selectnative",
+      label: "Select Native",
+      required: true,
+      native: true,
+      md: 12,
+      select: [
+        { value: "valor1", label: "Valor 1" },
+        { value: "valor2", label: "Valor 2" },
+      ],
+    },
+    {
+      title: "Input Select Multiple native",
+      name: "selectmultiplenative",
+      label: "Select Multiple Native",
+      required: true,
+      native: true,
+      multipleSelect: true,
+      md: 12,
+      select: [
+        { value: "valor1", label: "Valor 1" },
+        { value: "valor2", label: "Valor 2" },
+      ],
+    },
   ]}
 >
   {() => <button>Enviar</button>}
@@ -308,6 +335,8 @@ import Forms from "./index.tsx";
 ```
 
 #### Input File:
+
+###### [!] no suport for multiple and accepts file.
 
 ```tsx
 import Forms from "./index.tsx";
