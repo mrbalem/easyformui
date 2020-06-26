@@ -3,7 +3,7 @@ import { InputsProps } from "../../type";
 import { FormControl, FormHelperText } from "@material-ui/core";
 import { Field } from "formik";
 import { CheckboxWithLabel } from "formik-material-ui";
-import { useInputStyle } from "../style";
+//import { useInputStyle } from "../style";
 
 /**
  * @author Rony cb
@@ -13,22 +13,30 @@ import { useInputStyle } from "../style";
 
 const CheckBox: React.SFC<InputsProps> = (props) => {
   const { errors, value, touched } = props;
-  const classes = useInputStyle();
+  //const classes = useInputStyle();
   return (
     <FormControl
       component="fieldset"
       required
       error={errors[value.name] && touched[value.name] ? true : undefined}
-      className={classes.formControl}
+      style={{ width: "100%" }}
     >
-      <Field
-        component={CheckboxWithLabel}
-        type={value.type}
-        disabled={value.disabled}
-        //required={value.required}
-        Label={{ label: value.label }}
-        name={value.name}
-      />
+      <div
+        style={{
+          justifyContent: "center",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Field
+          component={CheckboxWithLabel}
+          type={value.type}
+          disabled={value.disabled}
+          //required={value.required}
+          Label={{ label: value.label }}
+          name={value.name}
+        />
+      </div>
       {errors[value.name] && touched[value.name] && (
         <FormHelperText style={{ textAlign: "center" }}>
           {value.messageValidation ||
