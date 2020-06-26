@@ -4,6 +4,9 @@
   "description": "Libreria de formularios basado en formik con material ui.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
     "start": "styleguidist server",
     "prepublishOnly": "rm -rf build && npm run-script buildWebpack",
