@@ -307,6 +307,8 @@ import Forms from "./index.tsx";
       title: "Input Select native",
       name: "selectnative",
       label: "Select Native",
+
+      // shrink: true,
       required: true,
       native: true,
       md: 12,
@@ -320,6 +322,7 @@ import Forms from "./index.tsx";
       name: "selectmultiplenative",
       label: "Select Multiple Native",
       required: true,
+      shrink: true,
       native: true,
       multipleSelect: true,
       md: 12,
