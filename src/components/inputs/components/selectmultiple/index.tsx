@@ -14,6 +14,8 @@ import { InputsProps } from "../../type";
  * @author Rony cb
  * @version 1.0.0
  * @param props props component SelectMultiple
+ * @description [!] Select not found in React.Strict, alert error for FindDomain,
+ * use native select multiple.
  */
 
 const SelectMultiple: React.SFC<InputsProps> = (props) => {
