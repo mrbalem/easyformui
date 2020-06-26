@@ -4,14 +4,11 @@ import {
   InputLabel,
   Chip,
   MenuItem,
-  Theme,
-  useTheme,
   FormHelperText,
 } from "@material-ui/core";
 import { Select } from "formik-material-ui";
 import { Field } from "formik";
 import { InputsProps } from "../../type";
-import { useInputStyle } from "../style";
 
 /**
  * @author Rony cb
@@ -20,25 +17,24 @@ import { useInputStyle } from "../style";
  */
 
 const SelectMultiple: React.SFC<InputsProps> = (props) => {
-  const { errors, value, variant, touched } = props;
-
-  //[*] hooks style
-  const classes = useInputStyle();
-
-  //[*] hooks theme
-  const theme = useTheme();
+  const { errors, value, variant, touched, style, className } = props;
 
   //render items multiple
   const [element, setElement] = React.useState<string[]>([]);
 
-  function getStyles(name: string, personName: string[], theme: Theme) {
-    return {
-      fontWeight:
-        personName.indexOf(name) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-  }
+  // habdle change multiple native verision
+  const handleChangeMultiple = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    const { options } = event.target as HTMLSelectElement;
+    const value: string[] = [];
+    for (let i = 0, l = options.length; i < l; i += 1) {
+      if (options[i].selected) {
+        value.push(options[i].value);
+      }
+    }
+    setElement(value);
+  };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setElement(event.target.value as string[]);
@@ -48,9 +44,14 @@ const SelectMultiple: React.SFC<InputsProps> = (props) => {
     <FormControl
       error={errors[value.name] && touched[value.name] ? true : undefined}
       variant={variant}
-      className={classes.formControl}
+      style={{ minWidth: "100%", ...style }}
+      className={className}
     >
-      <InputLabel htmlFor={value.name + "selectlabel"}>
+      <InputLabel
+        style={{ background: "#fff" }}
+        shrink={value.native}
+        htmlFor={value.name + "selectlabel"}
+      >
         {value.label}
       </InputLabel>
 
@@ -58,35 +59,47 @@ const SelectMultiple: React.SFC<InputsProps> = (props) => {
         component={Select}
         multiple
         name={value.name}
-        variant="outlined"
+        native={value.native}
+        variant={variant}
         fullWidth
         type="text"
         inputProps={{
           name: `${value.name}`,
           id: value.name + "selectlabel",
           value: element,
-          onChange: handleChange,
+          onChange: value.native ? handleChangeMultiple : handleChange,
         }}
         label={value.label}
-        renderValue={(selected: any) => (
-          <div className={classes.chips}>
-            {(selected as string[]).map((value) => (
-              <Chip key={value} label={value} className={classes.chip} />
-            ))}
-          </div>
-        )}
+        renderValue={
+          !value.native
+            ? (selected: any) => (
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {(selected as string[]).map((value) => (
+                    <Chip key={value} label={value} style={{ margin: 1 }} />
+                  ))}
+                </div>
+              )
+            : undefined
+        }
       >
         {value.select &&
-          value.select.map((name) => (
-            <MenuItem
-              key={name.value}
-              value={name.value}
-              style={getStyles(name.label, ["valor1", "valor2"], theme)}
-            >
-              {name.label}
-            </MenuItem>
-          ))}
+          value.select.map((name, index) =>
+            value.native ? (
+              <option key={name.value + index.toString()} value={name.value}>
+                {name.label}
+              </option>
+            ) : (
+              <MenuItem key={name.value + index.toString()} value={name.value}>
+                {name.label}
+              </MenuItem>
+            )
+          )}
       </Field>
+      {value.native && value.multipleSelect && !errors[value.name] && (
+        <FormHelperText>
+          usa Ctrol + click para seleccionar las opciones
+        </FormHelperText>
+      )}
       {errors[value.name] && touched[value.name] && (
         <FormHelperText>{value.label} es un campo obligatorio</FormHelperText>
       )}
