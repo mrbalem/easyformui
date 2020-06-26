@@ -1,6 +1,6 @@
 <!-- @format -->
 <h1 align="center">
- Easyformui
+ Easyformui include formik, yup and formik-material-ui.
 </h1>
 
 <br>
