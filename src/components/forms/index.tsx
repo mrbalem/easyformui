@@ -136,6 +136,10 @@ export type formtype = {
    * If true use native select for input select
    */
   native?: true;
+  /**
+   * backgorund label
+   */
+  labelBackground?: string;
 };
 
 /**
@@ -165,6 +169,7 @@ export interface FormsProps {
    *@param autoFocus If true, input focus automatic. <br/>
    *@param multipleSelect: If true, a multiline element rendered instead of an input. <br/>
    *@param native: If true use native select for input select
+   *@param labelBackground background label.
    */
   form: Array<formtype>;
   /**
