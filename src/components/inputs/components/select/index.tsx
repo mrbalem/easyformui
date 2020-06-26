@@ -8,7 +8,6 @@ import {
   FormHelperText,
 } from "@material-ui/core";
 import { Field } from "formik";
-import { useInputStyle } from "../style";
 import { Select as MuiSelect } from "formik-material-ui";
 
 /**
@@ -18,8 +17,7 @@ import { Select as MuiSelect } from "formik-material-ui";
  */
 
 const Select: React.SFC<InputsProps> = (props) => {
-  const { errors, value, variant, touched } = props;
-  const classes = useInputStyle();
+  const { errors, value, variant, touched, style, className } = props;
 
   //[*] get Error for component select values
   const getError = (
@@ -32,14 +30,15 @@ const Select: React.SFC<InputsProps> = (props) => {
     <FormControl
       error={errors[value.name] && touched[value.name] ? true : undefined}
       variant={variant}
-      className={classes.formControl}
+      style={{ minWidth: "100%", ...style }}
+      className={className}
     >
       <InputLabel htmlFor={value.name + "selectlabel"}>
         {value.label}
       </InputLabel>
       <Field
         component={MuiSelect}
-        // native
+        native={value.native}
         name={value.name}
         variant={variant}
         fullWidth
@@ -49,11 +48,17 @@ const Select: React.SFC<InputsProps> = (props) => {
         }}
         label={value.label}
       >
-        {getError(value.select).map((ele, index) => (
-          <MenuItem key={ele.value + index.toString()} value={ele.value}>
-            {ele.label}
-          </MenuItem>
-        ))}
+        {getError(value.select).map((ele, index) =>
+          value.native ? (
+            <option key={ele.value + index.toString()} value={ele.value}>
+              {ele.label}
+            </option>
+          ) : (
+            <MenuItem key={ele.value + index.toString()} value={ele.value}>
+              {ele.label}
+            </MenuItem>
+          )
+        )}
       </Field>
       {errors[value.name] && touched[value.name] && (
         <FormHelperText>{value.label} es un campo obligatorio</FormHelperText>
