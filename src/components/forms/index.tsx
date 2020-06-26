@@ -122,6 +122,11 @@ export type formtype = {
    * @description Type input select defual values [{value: "", label: ""}]
    */
   select?: Array<{ value: string; label: string }>;
+  /**
+   * @param multipleSelect
+   * @description If true, a multiline element rendered instead of an input
+   */
+  multipleSelect?: true;
 };
 
 /**
