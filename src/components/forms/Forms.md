@@ -279,9 +279,22 @@ import Forms from "./index.tsx";
     },
     {
       title: "Input Select defaulValue",
-      name: "select3",
+      name: "selectdefault",
       label: "Select defaulValue",
+      required: true,
       initialValue: "valor1",
+      md: 12,
+      select: [
+        { value: "valor1", label: "Valor 1" },
+        { value: "valor2", label: "Valor 2" },
+      ],
+    },
+    {
+      title: "Input Select Multiple",
+      name: "selectmultiple",
+      label: "Select Multiple",
+      required: true,
+      multipleSelect: true,
       md: 12,
       select: [
         { value: "valor1", label: "Valor 1" },
@@ -298,6 +311,8 @@ import Forms from "./index.tsx";
 
 ```tsx
 import Forms from "./index.tsx";
+
+//[!] no suport multiple and accepts file.
 
 <Forms
   onSubmit={(values, { setSubmitting }) => {
@@ -320,15 +335,16 @@ import Forms from "./index.tsx";
       type: "file",
       md: 6,
     },
-    {
-      title: "Input File accept ",
-      name: "file4",
-      label: "File accept",
-      // i need suport for accept and multiple file
-      //inputProps: { accept: "image/png, image/jpeg", multiple: true },
-      type: "file",
-      md: 12,
-    },
+    // deprecated
+    // {
+    //   title: "Input File accept ",
+    //   name: "file4",
+    //   label: "File accept",
+    //   // no suport for accept and multiple file in this input
+    //   //inputProps: { accept: "image/png, image/jpeg", multiple: true },
+    //   type: "file",
+    //   md: 12,
+    // },
   ]}
 >
   {() => <button>Enviar</button>}
